@@ -21,7 +21,13 @@ export function useModelDeploymentStatus(model: ModelEntity | undefined) {
   const { data: provider, isLoading: isLoadingProvider } = useModelsGetProvider(
     providerParts?.workspace ?? workspace,
     providerParts?.name ?? '',
-    { query: { enabled: hasProviders && Boolean(providerParts?.name), retry: false } }
+    {
+      query: {
+        enabled: hasProviders && Boolean(providerParts?.name),
+        retry: false,
+        retryOnMount: false,
+      },
+    }
   );
 
   const deploymentParts = provider?.model_deployment_id
@@ -31,7 +37,13 @@ export function useModelDeploymentStatus(model: ModelEntity | undefined) {
   const { data: deployment, isLoading: isLoadingDeployment } = useModelsGetLatestDeployment(
     deploymentParts?.workspace ?? workspace,
     deploymentParts?.name ?? '',
-    { query: { enabled: hasProviders && Boolean(deploymentParts?.name), retry: false } }
+    {
+      query: {
+        enabled: hasProviders && Boolean(deploymentParts?.name),
+        retry: false,
+        retryOnMount: false,
+      },
+    }
   );
 
   const isLoading = hasProviders && (isLoadingProvider || isLoadingDeployment);

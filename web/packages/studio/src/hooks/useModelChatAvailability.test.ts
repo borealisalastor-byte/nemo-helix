@@ -78,7 +78,7 @@ describe('useModelChatAvailability', () => {
 
     // Workspace and name taken apart: passing the whole ref as the name 404s.
     expect(mockGetModel).toHaveBeenCalledWith('default', 'qwen3-0.6b', undefined, {
-      query: { enabled: true, retry: false },
+      query: { enabled: true, retry: false, retryOnMount: false },
     });
     expect(mockDeploymentStatus).toHaveBeenCalledWith(base);
   });

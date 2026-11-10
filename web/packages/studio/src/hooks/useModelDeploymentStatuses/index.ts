@@ -122,6 +122,7 @@ export function useModelDeploymentStatuses(
         queryKey: getModelsGetProviderQueryKey(parts.workspace, parts.name),
         queryFn: () => modelsGetProvider(parts.workspace, parts.name),
         retry: false,
+        retryOnMount: false,
         staleTime: PROVIDER_STALE_TIME,
       };
     }),
@@ -194,6 +195,7 @@ export function useModelDeploymentStatuses(
         queryKey: getModelsGetLatestDeploymentQueryKey(parts.workspace, parts.name),
         queryFn: () => modelsGetLatestDeployment(parts.workspace, parts.name),
         retry: false,
+        retryOnMount: false,
       };
     }),
     combine: combineDeployments,

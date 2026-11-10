@@ -36,7 +36,7 @@ export function useModelChatAvailability(
     baseParts?.workspace ?? model?.workspace ?? '',
     baseParts?.name ?? baseModelRef ?? '',
     undefined,
-    { query: { enabled: Boolean(baseModelRef), retry: false } }
+    { query: { enabled: Boolean(baseModelRef), retry: false, retryOnMount: false } }
   );
 
   const modelForStatus = baseModelRef ? baseModelEntity : model;

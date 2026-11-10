@@ -66,6 +66,10 @@ export function useServedModel(
         queryFn: () => modelsGetProvider(parts.workspace, parts.name),
         enabled,
         retry: false,
+        // A failed lookup refetches whenever another component mounts on it, and with no data
+        // that resets it to pending: callers that swap content on `isLoading` then remount the
+        // other component and loop.
+        retryOnMount: false,
         staleTime: 5 * 60 * 1000,
       };
     }),
