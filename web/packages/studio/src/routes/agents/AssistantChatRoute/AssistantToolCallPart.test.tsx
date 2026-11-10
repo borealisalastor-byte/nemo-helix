@@ -7,6 +7,7 @@ import {
   ASSISTANT_SUBTLE_TOOL_GROUP_NAME,
   ASSISTANT_THINKING_TOOL_NAME,
 } from '@nemo/common/src/components/AssistantChat/toolParts';
+import { MockToastProvider } from '@nemo/common/src/tests/MockToastProvider';
 import { AssistantToolCallPart } from '@studio/routes/agents/AssistantChatRoute/AssistantToolCallPart';
 import {
   ASSISTANT_JOB_PROGRESS_MCP_TOOL_NAME,
@@ -30,17 +31,19 @@ const renderPart = async ({
   ...overrides
 }: Pick<PartProps, 'args' | 'toolName'> & Partial<PartProps>) => {
   render(
-    <AssistantToolCallPart
-      addResult={vi.fn()}
-      args={args}
-      argsText={JSON.stringify(args)}
-      resume={vi.fn()}
-      status={{ type: 'complete' }}
-      toolCallId={`toolu_${toolName}`}
-      toolName={toolName}
-      type="tool-call"
-      {...overrides}
-    />
+    <MockToastProvider>
+      <AssistantToolCallPart
+        addResult={vi.fn()}
+        args={args}
+        argsText={JSON.stringify(args)}
+        resume={vi.fn()}
+        status={{ type: 'complete' }}
+        toolCallId={`toolu_${toolName}`}
+        toolName={toolName}
+        type="tool-call"
+        {...overrides}
+      />
+    </MockToastProvider>
   );
   await waitFor(() => {
     for (const code of screen.queryAllByTestId('nv-code-snippet-code')) {
@@ -171,9 +174,10 @@ describe('AssistantToolCallPart', () => {
     expect(within(step).queryByText('Arguments')).not.toBeInTheDocument();
     expect(step).toHaveTextContent('pnpm --filter nemo-studio-ui test');
 
-    await user.click(within(step).getByTestId('nv-code-snippet-copy-button'));
+    await user.click(within(step).getByRole('button', { name: 'Copy' }));
 
     expect(await navigator.clipboard.readText()).toBe('pnpm --filter nemo-studio-ui test');
+    expect(await screen.findByText('Successfully copied to clipboard!')).toBeInTheDocument();
   });
 
   it('shows the arguments, not an empty Command, for a Bash call without a command', async () => {
